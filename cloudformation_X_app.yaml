@@ -1,0 +1,144 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "CloudFormation Template for Best Approach AWS Architecture"
+
+Resources:
+
+  # VPCs
+  NotificationServiceVPC:
+    Type: "AWS::EC2::VPC"
+    Properties:
+      CidrBlock: "10.0.0.0/16"
+      Tags:
+        - Key: "Name"
+          Value: "NotificationServiceVPC"
+
+  InputServiceVPC:
+    Type: "AWS::EC2::VPC"
+    Properties:
+      CidrBlock: "10.1.0.0/16"
+      Tags:
+        - Key: "Name"
+          Value: "InputServiceVPC"
+
+  TimelineServiceVPC:
+    Type: "AWS::EC2::VPC"
+    Properties:
+      CidrBlock: "10.2.0.0/16"
+      Tags:
+        - Key: "Name"
+          Value: "TimelineServiceVPC"
+
+  SearchServiceVPC:
+    Type: "AWS::EC2::VPC"
+    Properties:
+      CidrBlock: "10.3.0.0/16"
+      Tags:
+        - Key: "Name"
+          Value: "SearchServiceVPC"
+
+  # Lambda Functions
+  AnalyticsLambda:
+    Type: "AWS::Lambda::Function"
+    Properties:
+      FunctionName: "AnalyticsLambda"
+      Handler: "lambda_function.lambda_handler"
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Runtime: "python3.9"
+      Code:
+        S3Bucket: "your-lambda-code-bucket"
+        S3Key: "analytics_lambda.zip"
+
+  ComputeLambda:
+    Type: "AWS::Lambda::Function"
+    Properties:
+      FunctionName: "ComputeLambda"
+      Handler: "lambda_function.lambda_handler"
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Runtime: "python3.9"
+      Code:
+        S3Bucket: "your-lambda-code-bucket"
+        S3Key: "compute_lambda.zip"
+
+  # IAM Role for Lambda Execution
+  LambdaExecutionRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service: "lambda.amazonaws.com"
+            Action: "sts:AssumeRole"
+      Policies:
+        - PolicyName: "LambdaBasicExecution"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "logs:CreateLogGroup"
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                Resource: "arn:aws:logs:*:*:*"
+
+  # S3 Bucket
+  DataBucket:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      BucketName: "data-storage-bucket"
+      AccessControl: "Private"
+      Tags:
+        - Key: "Name"
+          Value: "DataBucket"
+
+  # Kinesis Stream
+  DataStream:
+    Type: "AWS::Kinesis::Stream"
+    Properties:
+      Name: "DataStream"
+      ShardCount: 1
+
+  # Cognito User Pool
+  UserPool:
+    Type: "AWS::Cognito::UserPool"
+    Properties:
+      UserPoolName: "UserPool"
+
+  UserPoolClient:
+    Type: "AWS::Cognito::UserPoolClient"
+    Properties:
+      ClientName: "UserPoolClient"
+      UserPoolId: !Ref UserPool
+
+  # ElastiCache
+  RedisCluster:
+    Type: "AWS::ElastiCache::CacheCluster"
+    Properties:
+      Engine: "redis"
+      CacheNodeType: "cache.t2.micro"
+      NumCacheNodes: 1
+      ClusterName: "RedisCluster"
+
+  # OpenSearch Domain
+  SearchDomain:
+    Type: "AWS::OpenSearchService::Domain"
+    Properties:
+      DomainName: "SearchDomain"
+      ElasticsearchVersion: "7.10"
+      ElasticsearchClusterConfig:
+        InstanceType: "m5.large.elasticsearch"
+        InstanceCount: 1
+      EBSOptions:
+        EBSEnabled: true
+        VolumeSize: 10
+
+Outputs:
+
+  VPCIds:
+    Description: "List of VPC IDs"
+    Value:
+      - !Ref NotificationServiceVPC
+      - !Ref InputServiceVPC
+      - !Ref TimelineServiceVPC
+      - !Ref SearchServiceVPC
