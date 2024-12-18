@@ -174,7 +174,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="CSNnqZ7efJA5Vow9DsNK" name="Best aproach">
-    <mxGraphModel dx="1418" dy="619" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1595" dy="696" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -473,7 +473,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="c2EhBTdRbMbfveJLfsOm-9" value="" style="html=1;verticalLabelPosition=bottom;align=center;labelBackgroundColor=#ffffff;verticalAlign=top;strokeWidth=2;strokeColor=#0080F0;shadow=0;dashed=0;shape=mxgraph.ios7.icons.message;" parent="1" vertex="1">
-          <mxGeometry x="410" y="20" width="50" height="50" as="geometry" />
+          <mxGeometry x="410" y="110" width="50" height="50" as="geometry" />
         </mxCell>
         <mxCell id="c2EhBTdRbMbfveJLfsOm-20" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.088;exitY=0.868;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="c2EhBTdRbMbfveJLfsOm-9" target="c2EhBTdRbMbfveJLfsOm-10" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
